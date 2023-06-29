@@ -1,9 +1,10 @@
+import { Flex } from "@chakra-ui/react";
 import React, { useEffect, useState, useRef } from 'react';
 import ChatBar from './ChatBar';
 import ChatBody from './ChatBody';
 import ChatFooter from './ChatFooter';
 
-const ChatPage = ({ socket }) => {
+const ChatApp = ({ socket }) => {
   const [messages, setMessages] = useState([]);
   const [typingStatus, setTypingStatus] = useState('');
   const lastMessageRef = useRef(null);
@@ -21,18 +22,25 @@ const ChatPage = ({ socket }) => {
   }, [socket]);
 
   return (
-    <div className="chat">
+    <Flex height="100vh" alignItems="stretch">
       <ChatBar socket={socket} />
-      <div className="chat__main">
-        <ChatBody
-          messages={messages}
+      <Flex 
+        flexDirection={"column"} 
+        width="80%" 
+        borderWidth={1} 
+        p={2}
+        justifyContent={"space-between"}
+      >
+        <ChatBody 
+          messages={messages} 
           typingStatus={typingStatus}
           lastMessageRef={lastMessageRef}
+          socket={socket}
         />
-        <ChatFooter socket={socket} />
-      </div>
-    </div>
+        <ChatFooter socket={socket}/>
+      </Flex>
+    </Flex>
   );
 };
 
-export default ChatPage;
+export default ChatApp;

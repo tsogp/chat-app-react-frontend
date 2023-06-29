@@ -1,5 +1,7 @@
+import { Heading, Input, Box, Flex, IconButton } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { IoArrowForwardCircle } from "react-icons/io5";
 
 const Home = ({ socket }) => {
   const navigate = useNavigate();
@@ -7,26 +9,34 @@ const Home = ({ socket }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem('userName', userName);
+    localStorage.setItem(socket.id, userName);
     socket.emit('newUser', { userName, socketID: socket.id });
     navigate('/chat');
   };
   
   return (
-    <form className="home__container" onSubmit={handleSubmit}>
-      <h2 className="home__header">Sign in to Open Chat</h2>
-      <label htmlFor="username">Username</label>
-      <input
-        type="text"
-        minLength={6}
-        name="username"
-        id="username"
-        className="username__input"
-        value={userName}
-        onChange={(e) => setUserName(e.target.value)}
-      />
-      <button className="home__cta">SIGN IN</button>
-    </form>
+    <Flex height='90vh' justifyContent='center' alignItems='center'>
+      <Box borderWidth='1px' borderRadius='lg'>
+        <form onSubmit={handleSubmit}>
+          <Heading>Sign in to Open Chat</Heading>
+          <Flex flexDirection="row">
+            <Input
+              flex="1"
+              placeholder='Username'
+              type="text"
+              name="username"
+              minLength={2}
+              id="username"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              mr={2}
+            >
+            </Input>
+            <IconButton type='submit' icon={<IoArrowForwardCircle/>}></IconButton>
+          </Flex>
+        </form>
+      </Box>
+    </Flex>
   );
 };
 

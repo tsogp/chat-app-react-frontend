@@ -1,38 +1,45 @@
 import React, { useState } from 'react';
+import { Flex, Input, IconButton } from "@chakra-ui/react";
+import { IoSend } from "react-icons/io5";
 
 const ChatFooter = ({ socket }) => {
   const [message, setMessage] = useState('');
 
   const handleTyping = () =>
-    socket.emit('typing', `${localStorage.getItem('userName')} is typing`);
+    socket.emit('typing', `${localStorage.getItem(socket.id)} is typing`);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (message.trim() && localStorage.getItem('userName')) {
+    if (message.trim() && localStorage.getItem(socket.id)) {
       socket.emit('message', {
         text: message,
-        name: localStorage.getItem('userName'),
+        name: localStorage.getItem(socket.id),
         id: `${socket.id}${Math.random()}`,
         socketID: socket.id,
       });
     }
     setMessage('');
   };
-  
+
   return (
-    <div className="chat__footer">
-      <form className="form" onSubmit={handleSendMessage}>
-        <input
-          type="text"
-          placeholder="Write message"
-          className="message"
+    <form onSubmit={handleSendMessage}>
+      <Flex width={"100%"} flexDirection={"row"} alignItems={"stretch"}>
+        <Input
+          flex="1"
+          placeholder="Type your message..."
+          mr={2}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleTyping}
+          onSubmit={handleSendMessage}
+        />  
+        <IconButton
+          aria-label="Send"
+          icon={<IoSend />}
+          type="submit"
         />
-        <button className="sendBtn">SEND</button>
-      </form>
-    </div>
+      </Flex>
+    </form>
   );
 };
 
