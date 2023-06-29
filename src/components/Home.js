@@ -11,6 +11,7 @@ const Home = ({ socket }) => {
     socket.emit('newUser', { userName, socketID: socket.id });
     navigate('/chat');
   };
+  
   return (
     <form className="home__container" onSubmit={handleSubmit}>
       <h2 className="home__header">Sign in to Open Chat</h2>
